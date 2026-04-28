@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Philip Higuera" />
+
+<meta name="date" content="2026-04-27" />
+
+<title>CharAnalysis: Diagnostic and analytical tools for peak detection and fire-history interpretations using high-resolution sediment-charcoal records</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">CharAnalysis: Diagnostic and analytical
+tools for peak detection and fire-history interpretations using
+high-resolution sediment-charcoal records</h1>
+<h4 class="author">Philip Higuera</h4>
+<h4 class="date">2026-04-27</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#overview" id="toc-overview">Overview</a></li>
+<li><a href="#installation" id="toc-installation">Installation</a></li>
+<li><a href="#worked-example-code-lake" id="toc-worked-example-code-lake">Worked example: Code Lake</a>
+<ul>
+<li><a href="#input-files" id="toc-input-files">Input files</a></li>
+<li><a href="#running-the-full-pipeline" id="toc-running-the-full-pipeline">Running the full pipeline</a></li>
+<li><a href="#exploring-the-output" id="toc-exploring-the-output">Exploring the output</a></li>
+<li><a href="#output-figures" id="toc-output-figures">Output
+figures</a></li>
+<li><a href="#writing-results-to-csv" id="toc-writing-results-to-csv">Writing results to CSV</a></li>
+</ul></li>
+<li><a href="#key-parameters" id="toc-key-parameters">Key
+parameters</a></li>
+<li><a href="#comparison-with-matlab-v2.0" id="toc-comparison-with-matlab-v2.0">Comparison with MATLAB
+v2.0</a></li>
+<li><a href="#citation" id="toc-citation">Citation</a></li>
+<li><a href="#references" id="toc-references">References</a></li>
+</ul>
+</div>
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p><em>CharAnalysis</em> reconstructs local fire histories from
+lake-sediment charcoal records. Charcoal preserved in lake sediments is
+a direct proxy for past fire activity: individual fire events near a
+lake deposit pulses of charcoal that appear as peaks above a slowly
+varying background signal. <em>CharAnalysis</em> formalises this
+peak-detection logic as a reproducible, quantitative workflow.</p>
+<p>This R package (v2.0.0) is a direct translation of
+<em>CharAnalysis</em> v2.0 (MATLAB), validated against reference outputs
+on four benchmark datasets spanning a range of record lengths, sampling
+resolutions, ecosystems, and analysis configurations. Analytical methods
+are described in Higuera et al. (2009).</p>
+<p>The full workflow proceeds in five steps:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Pretreatment</strong> — Resample the raw charcoal series to
+equal time steps and compute charcoal accumulation rate (CHAR, pieces
+cm<sup>-2</sup> yr<sup>-1</sup>).</li>
+<li><strong>Smoothing</strong> — Estimate low-frequency trends
+(C<sub>background</sub>) using lowess or a moving-window statistic.</li>
+<li><strong>Peak decomposition</strong> — Compute the high-frequency
+residual C<sub>peak</sub> = C<sub>interp</sub> − C<sub>background</sub>
+(or ratio C<sub>interp</sub> / C<sub>background</sub>).</li>
+<li><strong>Thresholding</strong> — Define a noise threshold and flag
+C<sub>peak</sub> values that exceed it as candidate fire events.
+Thresholds can be global (one distribution fitted to the full record) or
+local (sliding-window distribution).</li>
+<li><strong>Screening and metrics</strong> — Apply a minimum-count
+significance test, then compute fire-return intervals (FRIs), Weibull
+statistics, smoothed fire frequency, signal-to-noise index (SNI), and
+goodness-of-fit.</li>
+</ol>
+<hr />
+</div>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Install from GitHub (requires devtools)</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;phiguera/CharAnalysis&quot;</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>                         <span class="at">subdir =</span> <span class="st">&quot;CharAnalysis_2_0_R&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co"># Suggested packages for figures</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;patchwork&quot;</span>, <span class="st">&quot;ggtext&quot;</span>))</span></code></pre></div>
+<hr />
+</div>
+<div id="worked-example-code-lake" class="section level2">
+<h2>Worked example: Code Lake</h2>
+<p>Code Lake (CO; Colorado, USA) is the primary validation dataset for
+<em>CharAnalysis</em>. The record spans approximately 7,300 calibrated
+years BP and is analysed here using a local Gaussian mixture model (GMM)
+threshold — the recommended default configuration.</p>
+<div id="input-files" class="section level3">
+<h3>Input files</h3>
+<p><em>CharAnalysis</em> reads two CSV files:</p>
+<ul>
+<li><strong><code>CO_charData.csv</code></strong> — the charcoal data
+table (depth, age, volume, count).</li>
+<li><strong><code>CO_charParams.csv</code></strong> — the analysis
+parameter file.</li>
+</ul>
+<p>Both files are included in the package’s <code>inst/extdata/</code>
+directory and can be located with <code>system.file()</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>params_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;CO_charParams.csv&quot;</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>                           <span class="at">package =</span> <span class="st">&quot;CharAnalysis&quot;</span>)</span></code></pre></div>
+<p>For this vignette we reference the files directly from the
+repository:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>params_file <span class="ot">&lt;-</span> <span class="st">&quot;path/to/CO_charParams.csv&quot;</span>   <span class="co"># adjust to your local path</span></span></code></pre></div>
+</div>
+<div id="running-the-full-pipeline" class="section level3">
+<h3>Running the full pipeline</h3>
+<p>A single call to <code>CharAnalysis()</code> runs all five analytical
+steps and returns a named list of results.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(CharAnalysis)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">CharAnalysis</span>(params_file)</span></code></pre></div>
+<p>The progress messages show each step completing in sequence:</p>
+<pre><code>(1) Reading input file...
+      ...done.
+(1b) Validating input parameters...
+(2) Pretreating charcoal data...
+      ...done.
+(3) Smoothing resampled CHAR to estimate low-frequency trends
+    and calculating peak CHAR...
+      ...done.
+(4) Defining possible thresholds for peak identification...
+      ...done.
+(5) Identifying peaks and applying minimum-count screening...
+      ...done.
+(6) Post-processing: fire-return intervals, Weibull statistics...
+      ...done.
+(7) Pipeline complete.  Call char_write_results(...) to save output CSV.</code></pre>
+</div>
+<div id="exploring-the-output" class="section level3">
+<h3>Exploring the output</h3>
+<p><code>CharAnalysis()</code> returns a named list. The most commonly
+used elements are:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">names</span>(out)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;charcoal&quot;      &quot;pretreatment&quot;  &quot;smoothing&quot;     &quot;peak_analysis&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; [5] &quot;results&quot;       &quot;site&quot;          &quot;gap_in&quot;        &quot;char_thresh&quot;</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; [9] &quot;post&quot;          &quot;char_results&quot;</span></span></code></pre></div>
+<div id="the-charcoal-object" class="section level4">
+<h4>The <code>charcoal</code> object</h4>
+<p><code>out$charcoal</code> holds all time-series outputs, both raw and
+processed:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Inspect the first few rows of key time series</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">data.frame</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">age_BP    =</span> out<span class="sc">$</span>charcoal<span class="sc">$</span>ybpI,          <span class="co"># interpolated age (yr BP)</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="at">CHAR      =</span> out<span class="sc">$</span>charcoal<span class="sc">$</span>accI,          <span class="co"># C_interpolated  (pieces cm-2 yr-1)</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">C_bkg     =</span> out<span class="sc">$</span>charcoal<span class="sc">$</span>accIS,         <span class="co"># C_background</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="at">C_peak    =</span> out<span class="sc">$</span>charcoal<span class="sc">$</span>peak,          <span class="co"># C_peak (residuals)</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="at">peaks     =</span> out<span class="sc">$</span>charcoal<span class="sc">$</span>charPeaks[, <span class="dv">4</span>] <span class="co"># final-threshold peak flags (0/1)</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>))</span></code></pre></div>
+</div>
+<div id="the-char_thresh-object" class="section level4">
+<h4>The <code>char_thresh</code> object</h4>
+<p><code>out$char_thresh</code> holds threshold values, SNI, and
+goodness-of-fit results:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Threshold at the final percentile (column 4 = threshValues[4])</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">range</span>(out<span class="sc">$</span>char_thresh<span class="sc">$</span>pos[, <span class="dv">4</span>], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co"># Signal-to-noise index (SNI): values &gt; 3 indicate a strong signal</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">summary</span>(out<span class="sc">$</span>char_thresh<span class="sc">$</span>SNI)</span></code></pre></div>
+</div>
+<div id="post-processing-metrics" class="section level4">
+<h4>Post-processing metrics</h4>
+<p><code>out$post</code> holds fire-history summary metrics:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Fire-return intervals (FRIs) and mean FRI</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Number of FRIs:&quot;</span>, <span class="fu">length</span>(out<span class="sc">$</span>post<span class="sc">$</span>FRI), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Mean FRI:&quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>(out<span class="sc">$</span>post<span class="sc">$</span>FRI), <span class="dv">1</span>), <span class="st">&quot;yr</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co"># Per-zone Weibull statistics (zone 1)</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>fri_z1 <span class="ot">&lt;-</span> out<span class="sc">$</span>post<span class="sc">$</span>FRI_params_zone[<span class="dv">1</span>, ]</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="st">&quot;Zone 1 — nFRI: %d  mFRI: %.1f yr  WBLb: %.1f  WBLc: %.2f</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>  fri_z1[<span class="dv">1</span>], fri_z1[<span class="dv">2</span>], fri_z1[<span class="dv">5</span>], fri_z1[<span class="dv">8</span>]</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>))</span></code></pre></div>
+</div>
+<div id="the-char_results-matrix" class="section level4">
+<h4>The <code>char_results</code> matrix</h4>
+<p><code>out$char_results</code> is the complete N × 33 output matrix,
+with columns matching the MATLAB <code>charResults</code> CSV
+exactly:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">dim</span>(out<span class="sc">$</span>char_results)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; [1] 500  33</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co"># Total number of fire events identified</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">sum</span>(out<span class="sc">$</span>charcoal<span class="sc">$</span>charPeaks[, <span class="dv">4</span>], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; [1] 39</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="output-figures" class="section level3">
+<h3>Output figures</h3>
+<p><em>CharAnalysis</em> provides five publication-quality ggplot2
+figures. All are produced by <code>char_plot_all()</code>, or
+individually by their dedicated functions.</p>
+<div id="figure-3-cinterp-cbackground-and-cpeak" class="section level4">
+<h4>Figure 3 — C<sub>interp</sub>, C<sub>background</sub>, and
+C<sub>peak</sub></h4>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">char_plot_peaks</span>(out)</span></code></pre></div>
+<p>The top panel shows resampled CHAR (black bars) with the smoothed
+C<sub>background</sub> trend (grey line). The bottom panel shows
+C<sub>peak</sub> with the positive and negative threshold lines (red),
+identified fire events (+ symbols), and peaks that failed the
+minimum-count screen (grey dots).</p>
+</div>
+<div id="figure-5-cumulative-peaks-through-time" class="section level4">
+<h4>Figure 5 — Cumulative peaks through time</h4>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">char_plot_cumulative</span>(out)</span></code></pre></div>
+<p>The slope of the cumulative curve at any point reflects the
+instantaneous fire frequency. Changes in slope indicate periods of
+higher or lower fire activity.</p>
+</div>
+<div id="figure-6-fri-distributions-by-zone" class="section level4">
+<h4>Figure 6 — FRI distributions by zone</h4>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">char_plot_fri</span>(out)</span></code></pre></div>
+<p>Each panel shows a histogram of fire-return intervals within one
+stratigraphic zone (20-yr bins, normalised to proportions). A
+two-parameter Weibull probability density function is overlaid where the
+Kolmogorov-Smirnov goodness-of-fit test passes (p &gt; 0.10 for n &lt;
+30; p &gt; 0.05 for n ≥ 30). Weibull scale (b) and shape (c) parameters,
+mean FRI, and sample size are annotated.</p>
+</div>
+<div id="figure-7-continuous-fire-history" class="section level4">
+<h4>Figure 7 — Continuous fire history</h4>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">char_plot_fire_history</span>(out)</span></code></pre></div>
+<p>Three stacked panels show (from top to bottom): peak magnitude
+(integrated C<sub>peak</sub> above threshold per fire event, pieces
+cm<sup>-2</sup> peak<sup>-1</sup>); fire-return intervals through time
+as filled squares with the smoothed mean FRI curve (black line) and
+bootstrapped 95% CI ribbon (grey); and lowess-smoothed fire frequency
+(fires per 1000 yr).</p>
+</div>
+<div id="figure-8-between-zone-char-comparisons" class="section level4">
+<h4>Figure 8 — Between-zone CHAR comparisons</h4>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">char_plot_zones</span>(out)</span></code></pre></div>
+<p>The left panel shows empirical cumulative distribution functions of
+raw CHAR within each zone, with pairwise two-sample Kolmogorov-Smirnov
+test p-values annotated. The right panel shows box plots (10th, 25th,
+50th, 75th, 90th percentiles) of raw CHAR by zone.</p>
+</div>
+<div id="saving-all-figures-to-pdf" class="section level4">
+<h4>Saving all figures to PDF</h4>
+<p><code>out_dir</code> is a required argument when
+<code>save = TRUE</code>; the example below writes to a temporary
+directory so it can be run on any system, but you would normally
+substitute a path of your choosing (for example, <code>&quot;Results&quot;</code>
+inside your project folder).</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">char_plot_all</span>(out, <span class="at">save =</span> <span class="cn">TRUE</span>, <span class="at">out_dir =</span> <span class="fu">tempdir</span>())</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co"># Saves to tempdir():</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#   CO_03_CHAR_analysis.pdf</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#   CO_05_cumulative_peaks.pdf</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#   CO_06_FRI_distributions.pdf</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">#   CO_07_continuous_fire_hx.pdf</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">#   CO_08_zone_comparisons.pdf</span></span></code></pre></div>
+<blockquote>
+<p><strong>Note:</strong> Figures 9 (threshold sensitivity detail) and
+10 (multi-site comparisons) from the MATLAB v2.0 interface are not
+implemented in this R package. All core analytical outputs are available
+through Figures 1–8 above.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="writing-results-to-csv" class="section level3">
+<h3>Writing results to CSV</h3>
+<p><code>char_write_results()</code> writes the 33-column output matrix
+to a CSV file whose column names and format match the MATLAB
+<code>charResults</code> output exactly. <code>out_dir</code> is
+required (no default); substitute a path of your choosing for the
+temporary directory used here.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">char_write_results</span>(out<span class="sc">$</span>char_results,</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>                 <span class="at">site    =</span> out<span class="sc">$</span>site,</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>                 <span class="at">out_dir =</span> <span class="fu">tempdir</span>())</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co"># Writes: &lt;tempdir&gt;/CO_charResults.csv</span></span></code></pre></div>
+<p>The output CSV contains one row per interpolated time step and 33
+columns covering all analytical outputs from C<sub>interp</sub> through
+to per-zone Weibull confidence intervals. Column headers match the
+MATLAB reference file exactly to facilitate direct numerical
+comparison.</p>
+<hr />
+</div>
+</div>
+<div id="key-parameters" class="section level2">
+<h2>Key parameters</h2>
+<p>The parameter file (<code>*_charParams.csv</code>) controls all
+aspects of the analysis. The most commonly adjusted parameters are:</p>
+<table style="width:100%;">
+<colgroup>
+<col width="33%" />
+<col width="27%" />
+<col width="39%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>yrInterp</code></td>
+<td>15</td>
+<td>Resampling resolution (yr). Set to 0 for automatic (median raw
+resolution).</td>
+</tr>
+<tr class="even">
+<td><code>yr</code></td>
+<td>500</td>
+<td>Smoothing window width (yr) for C<sub>background</sub>
+estimation.</td>
+</tr>
+<tr class="odd">
+<td><code>threshType</code></td>
+<td>2</td>
+<td>Threshold type: 1 = global, 2 = local (sliding window).</td>
+</tr>
+<tr class="even">
+<td><code>threshMethod</code></td>
+<td>3</td>
+<td>Noise distribution: 2 = Gaussian, 3 = Gaussian mixture model.</td>
+</tr>
+<tr class="odd">
+<td><code>threshValues</code></td>
+<td>0.95, 0.99, 0.999, 0.99</td>
+<td>Percentile thresholds; the final value defines the working
+threshold.</td>
+</tr>
+<tr class="even">
+<td><code>minCountP</code></td>
+<td>0.05</td>
+<td>Alpha level for the minimum-count significance screen.</td>
+</tr>
+<tr class="odd">
+<td><code>peakFrequ</code></td>
+<td>1000</td>
+<td>Window width (yr) for smoothed fire frequency and FRI
+statistics.</td>
+</tr>
+<tr class="even">
+<td><code>zoneDiv</code></td>
+<td>record bounds</td>
+<td>Zone boundaries (yr BP) for stratified FRI and Weibull
+analysis.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="comparison-with-matlab-v2.0" class="section level2">
+<h2>Comparison with MATLAB v2.0</h2>
+<p><em>CharAnalysis</em> v2.0.0 (R) is a direct translation of
+<em>CharAnalysis</em> v2.0 (MATLAB). Outputs are quantitatively
+equivalent on all validated reference datasets. The table below
+summarises results across the four validation datasets; full details are
+in <code>inst/z_Validation_report_R_vs_MATLAB_V_2.0.md</code>.</p>
+<table style="width:100%;">
+<colgroup>
+<col width="13%" />
+<col width="8%" />
+<col width="16%" />
+<col width="28%" />
+<col width="13%" />
+<col width="19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dataset</th>
+<th>Site</th>
+<th>Smoothing</th>
+<th>charBkg max|diff|</th>
+<th>Peaks R v2.0.0</th>
+<th>Peaks MATLAB v2.0</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CO</td>
+<td>Code Lake, AK</td>
+<td>Method 1 (lowess)</td>
+<td>~5 × 10<sup>-6</sup></td>
+<td>39</td>
+<td>48</td>
+</tr>
+<tr class="even">
+<td>CH10</td>
+<td>Chickaree Lake, CO</td>
+<td>Method 2 (robust lowess)</td>
+<td>0.267</td>
+<td>59</td>
+<td>50</td>
+</tr>
+<tr class="odd">
+<td>SI17</td>
+<td>Silver Lake, CO</td>
+<td>Method 2 (robust lowess)</td>
+<td>0.130</td>
+<td>25</td>
+<td>31</td>
+</tr>
+<tr class="even">
+<td>RA07</td>
+<td>Raven Lake, AK</td>
+<td>Method 2 (robust lowess)</td>
+<td>&lt; 0.001</td>
+<td>15</td>
+<td>17</td>
+</tr>
+</tbody>
+</table>
+<p>Two sources of numerical difference are documented:</p>
+<p><strong>1. Robust lowess background (smoothing method 2)</strong> —
+MATLAB’s Curve Fitting Toolbox <code>smooth(..., &#39;rlowess&#39;)</code> and
+the R <code>char_lowess()</code> port produce slightly different
+C<sub>background</sub> series. For gap-free records (RA07) the
+difference is negligible (&lt; 0.001). For records with NaN gaps (CH10)
+the difference is larger (≤ 0.267) because the two implementations
+handle gap positions differently inside the bisquare robustness
+iteration. Smoothing method 1 (plain lowess) is not affected and agrees
+to within floating-point noise on all datasets.</p>
+<p><strong>2. Gaussian mixture model (GMM) peak counts</strong> — The R
+package ports the MATLAB <code>GaussianMixture.m</code> EM algorithm
+directly. Floating-point arithmetic accumulates differently across
+languages during EM iterations, causing the two implementations to reach
+slightly different threshold values in some local windows. Peak counts
+differ by 10–20% across datasets, with the direction varying (R
+sometimes higher, sometimes lower). All threshold and peak differences
+are downstream consequences of this single source; interpolation and
+peak-magnitude outputs agree to within numerical precision.</p>
+<p><strong>Weibull confidence intervals</strong> — Bootstrap CIs use
+random resampling and will differ between R and MATLAB runs regardless
+of any other differences. Weibull point estimates (scale <em>b</em>,
+shape <em>c</em>) agree within a few percent on datasets where peak
+counts are similar.</p>
+<hr />
+</div>
+<div id="citation" class="section level2">
+<h2>Citation</h2>
+<p>If you use <em>CharAnalysis</em> in published research, please cite
+Higuera et al. (2009), the first study to apply the core analytical
+tools implemented in the program. If you used <em>CharAnalysis</em> v2.0
+(MATLAB or R v2.0.0) specifically, please also cite the software:</p>
+<blockquote>
+<p>Higuera, P.E., L.B. Brubaker, P.M. Anderson, F.S. Hu, and T.A. Brown.
+2009. Vegetation mediated the impacts of postglacial climate change on
+fire regimes in the south-central Brooks Range, Alaska. <em>Ecological
+Monographs</em> 79:201–219. <a href="https://doi.org/10.1890/07-2019.1" class="uri">https://doi.org/10.1890/07-2019.1</a></p>
+</blockquote>
+<blockquote>
+<p>Higuera, P.E. 2026. <em>CharAnalysis</em>: Diagnostic and analytical
+tools for peak analysis in sediment-charcoal records (Version 2.0).
+Zenodo. <a href="https://doi.org/10.5281/zenodo.19304064" class="uri">https://doi.org/10.5281/zenodo.19304064</a></p>
+</blockquote>
+<hr />
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>Higuera, P.E., L.B. Brubaker, P.M. Anderson, F.S. Hu, and T.A. Brown.
+2009. Vegetation mediated the impacts of postglacial climate change on
+fire regimes in the south-central Brooks Range, Alaska. <em>Ecological
+Monographs</em> 79:201–219. <a href="https://doi.org/10.1890/07-2019.1" class="uri">https://doi.org/10.1890/07-2019.1</a></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
