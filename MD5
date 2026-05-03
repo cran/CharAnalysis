@@ -1,6 +1,6 @@
-ad5725f183432ec1812facac3931f377 *DESCRIPTION
+918d45c06f3c584cc6cb8c2dd841f9b2 *DESCRIPTION
 86aed433060723c7a13908d007906729 *NAMESPACE
-8ab68e7219377e60bf40e4bcd4eea9f8 *NEWS.md
+21559ec839acf53eb5fe2d2e783f55cf *NEWS.md
 23b1df692bafe352ab8cae201c91dc2a *R/CharAnalysis.R
 d14137fbc4ea1c11196d91ca0394c889 *R/char_lowess.R
 97f9e0c306246c077b0e3f18b730bce9 *R/char_parameters.R
@@ -17,9 +17,9 @@ ef6be15a4bc075c0078d53f1ba2bb540 *R/gaussian_mixture.R
 c6080d15d203383d6c2ceff325eb389f *R/zzz_imports.R
 3e8a151b2620a941ba6a86bc34aaa540 *build/vignette.rds
 7b76258281e35cf78305a62331323516 *inst/CharAnalysis_R_Translation_ProjectBrief.md
-64a2686b561bc7ff0d74195c209044f8 *inst/doc/CharAnalysis_intro.R
-e6b86cddd05f8e7e8defcbfb727c2502 *inst/doc/CharAnalysis_intro.Rmd
-67641ad97d342cca26852797024afd10 *inst/doc/CharAnalysis_intro.html
+ce27f84ca47a9003906520b0784742d1 *inst/doc/CharAnalysis_intro.R
+ad09ea3db2f387ea774d2144e739a0ce *inst/doc/CharAnalysis_intro.Rmd
+9730a9d288497d681a8b45f023c811c2 *inst/doc/CharAnalysis_intro.html
 091742be1a1098245cf9081887ca8d9f *inst/validation/CH10_charData.csv
 0a6d45fec6c3718b71afe5588deca9d8 *inst/validation/CH10_charParams.csv
 bd7ca7914615bf407f11903a45f1a96c *inst/validation/CH10_charResults.csv
@@ -29,6 +29,8 @@ b76c932415c67bbe5f812a86a622e050 *inst/validation/CO_charData.csv
 1ee592de881f9e2d2322adfbe01b269c *inst/validation/CO_charParams.csv
 58ccb1a09f25d54766245aae3914da2b *inst/validation/CO_charResults.csv
 2e013c0d0c2c1193ddbadf083e5cc7db *inst/validation/CO_charResults_V_1_1.csv
+b76c932415c67bbe5f812a86a622e050 *inst/validation/CO_compensated_charData.csv
+3d21d86b15e7ae6c33ccc21c568114d2 *inst/validation/CO_compensated_charParams.csv
 f10e5ecdc424f3def531f54c5bb08ea6 *inst/validation/RA07_charData.csv
 b2127e7eeecc47d9e6f31a7bad2b89a5 *inst/validation/RA07_charParams.csv
 ba18593d88c0ea6e99b02a0465e7b1a8 *inst/validation/RA07_charResults.csv
@@ -53,4 +55,4 @@ e603e95597e9c6ffadf405c9e9e0ee32 *man/char_smooth.Rd
 f0ed7d2fa9cac18c0e60104759885445 *man/char_validate_params.Rd
 d3a7744f0bdce00a6d79a2c060c899ad *man/char_write_results.Rd
 1bd69743ebd1ba60dbed3a6be4be6011 *man/gaussian_mixture_em.Rd
-e6b86cddd05f8e7e8defcbfb727c2502 *vignettes/CharAnalysis_intro.Rmd
+ad09ea3db2f387ea774d2144e739a0ce *vignettes/CharAnalysis_intro.Rmd

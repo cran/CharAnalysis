@@ -1,8 +1,8 @@
 Package: CharAnalysis
 Type: Package
 Title: Peak Detection and Fire History from Sediment-Charcoal Records
-Version: 2.0.2
-Date: 2026-04-27
+Version: 2.0.3
+Date: 2026-04-29
 Authors@R: person("Philip", "Higuera",
     email   = "philip.higuera@umontana.edu",
     role    = c("aut", "cre"),
@@ -30,9 +30,9 @@ Suggests: ggplot2 (>= 3.4.0), patchwork, ggtext, readxl, knitr,
 VignetteBuilder: knitr
 RoxygenNote: 7.3.3
 NeedsCompilation: no
-Packaged: 2026-04-27 22:30:53 UTC; philip.higuera
+Packaged: 2026-04-29 22:07:11 UTC; philip.higuera
 Author: Philip Higuera [aut, cre] (ORCID:
     <https://orcid.org/0000-0003-1278-4095>)
 Maintainer: Philip Higuera <philip.higuera@umontana.edu>
 Repository: CRAN
-Date/Publication: 2026-04-28 20:30:20 UTC
+Date/Publication: 2026-05-03 15:00:09 UTC

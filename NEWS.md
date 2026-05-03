@@ -1,3 +1,42 @@
+# *CharAnalysis* 2.0.3
+
+Patch release with substantive vignette improvements and several
+factual corrections to the worked example. No changes to analytical
+behaviour or to any function signature.
+
+- The vignette now live-renders all worked-example figures from the
+  bundled Code Lake dataset; the previous build showed only static
+  code blocks. Figure chunks are gated on the availability of
+  `ggplot2`, `patchwork`, and `ggtext` (all in `Suggests`) and skip
+  cleanly if any is missing.
+- Two diagnostic figures, `char_plot_raw()` (Fig. 1) and
+  `char_plot_thresh_diag()` (Fig. 2), are now included in the
+  vignette alongside the analytical figures (Figs. 3, 5, 6, 7, 8).
+- A new bundled parameter file `CO_compensated_charParams.csv`
+  (with companion `CO_compensated_charData.csv`) is shipped in
+  `inst/validation/`. It is identical to the standard `CO_charParams.csv`
+  except that the working threshold percentile (`threshValues[4]`) is
+  lowered from 0.99 to 0.95 to compensate for language-induced drift in
+  the Gaussian mixture model (GMM) noise estimation. The vignette uses
+  this file for the worked example. With this compensation, R identifies
+  50 peaks for Code Lake (close to the published MATLAB v2.0 result of
+  48 peaks) and reproduces the significant decrease in fire-return
+  intervals from Zone 1 to Zone 2 reported in Higuera et al. (2009).
+  The strict 1-to-1 reference configuration remains available as
+  `CO_charParams.csv`.
+- The vignette's *Comparison with MATLAB v2.0* section gained a
+  `Threshold` column in the validation table and a new "CO (compensated)"
+  row; the narrative below the table was rewritten in terms of
+  compensation for GMM drift rather than ad-hoc tuning.
+- Vignette factual corrections: Code Lake is in Alaska (not Colorado);
+  the smoothing-method label for Code Lake in the validation table is
+  Method 4 (moving median), not Method 1 (lowess); the discussion of
+  smoothing-related differences was adjusted to identify Method 2
+  (robust lowess) as the only method that diverges between R and MATLAB.
+- Fixed a stale `system.file()` path in the vignette
+  (`extdata` → `validation`) that would have returned an empty string
+  if the chunk had been evaluated.
+
 # *CharAnalysis* 2.0.2
 
 Patch release addressing the third round of CRAN reviewer feedback,

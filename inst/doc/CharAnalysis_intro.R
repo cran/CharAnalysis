@@ -3,9 +3,18 @@ knitr::opts_chunk$set(
   collapse  = TRUE,
   comment   = "#>",
   fig.align = "center",
+  fig.width = 7,
+  fig.height = 5,
   warning   = FALSE,
   message   = FALSE
 )
+
+# Suggests-package gate: figure chunks live-render only when ggplot2,
+# patchwork, and ggtext are all installed. If any is missing, those
+# chunks skip cleanly and the rest of the vignette still builds.
+PLOT_OK <- requireNamespace("ggplot2",   quietly = TRUE) &&
+           requireNamespace("patchwork", quietly = TRUE) &&
+           requireNamespace("ggtext",    quietly = TRUE)
 
 ## ----install, eval = FALSE----------------------------------------------------
 # # Install from GitHub (requires devtools)
@@ -15,75 +24,73 @@ knitr::opts_chunk$set(
 # # Suggested packages for figures
 # install.packages(c("ggplot2", "patchwork", "ggtext"))
 
-## ----paths, eval = FALSE------------------------------------------------------
-# params_file <- system.file("extdata", "CO_charParams.csv",
-#                            package = "CharAnalysis")
+## ----paths--------------------------------------------------------------------
+params_file <- system.file("validation", "CO_compensated_charParams.csv",
+                           package = "CharAnalysis")
+params_file
 
-## ----set-paths, eval = FALSE--------------------------------------------------
-# params_file <- "path/to/CO_charParams.csv"   # adjust to your local path
+## ----run, message = TRUE------------------------------------------------------
+library(CharAnalysis)
+out <- CharAnalysis(params_file)
 
-## ----run, eval = FALSE--------------------------------------------------------
-# library(CharAnalysis)
-# 
-# out <- CharAnalysis(params_file)
+## ----output-structure---------------------------------------------------------
+names(out)
 
-## ----output-structure, eval = FALSE-------------------------------------------
-# names(out)
-# #> [1] "charcoal"      "pretreatment"  "smoothing"     "peak_analysis"
-# #> [5] "results"       "site"          "gap_in"        "char_thresh"
-# #> [9] "post"          "char_results"
+## ----charcoal-----------------------------------------------------------------
+# Inspect the first few rows of key time series
+head(data.frame(
+  age_BP    = out$charcoal$ybpI,          # interpolated age (yr BP)
+  CHAR      = out$charcoal$accI,          # C_interpolated  (pieces cm-2 yr-1)
+  C_bkg     = out$charcoal$accIS,         # C_background
+  C_peak    = out$charcoal$peak,          # C_peak (residuals)
+  peaks     = out$charcoal$charPeaks[, 4] # final-threshold peak flags (0/1)
+))
 
-## ----charcoal, eval = FALSE---------------------------------------------------
-# # Inspect the first few rows of key time series
-# head(data.frame(
-#   age_BP    = out$charcoal$ybpI,          # interpolated age (yr BP)
-#   CHAR      = out$charcoal$accI,          # C_interpolated  (pieces cm-2 yr-1)
-#   C_bkg     = out$charcoal$accIS,         # C_background
-#   C_peak    = out$charcoal$peak,          # C_peak (residuals)
-#   peaks     = out$charcoal$charPeaks[, 4] # final-threshold peak flags (0/1)
-# ))
+## ----thresh-------------------------------------------------------------------
+# Threshold at the final percentile (column 4 = threshValues[4])
+range(out$char_thresh$pos[, 4], na.rm = TRUE)
 
-## ----thresh, eval = FALSE-----------------------------------------------------
-# # Threshold at the final percentile (column 4 = threshValues[4])
-# range(out$char_thresh$pos[, 4], na.rm = TRUE)
-# 
-# # Signal-to-noise index (SNI): values > 3 indicate a strong signal
-# summary(out$char_thresh$SNI)
+# Signal-to-noise index (SNI): values > 3 indicate a strong signal
+summary(out$char_thresh$SNI)
 
-## ----post, eval = FALSE-------------------------------------------------------
-# # Fire-return intervals (FRIs) and mean FRI
-# cat("Number of FRIs:", length(out$post$FRI), "\n")
-# cat("Mean FRI:", round(mean(out$post$FRI), 1), "yr\n")
-# 
-# # Per-zone Weibull statistics (zone 1)
-# fri_z1 <- out$post$FRI_params_zone[1, ]
-# cat(sprintf(
-#   "Zone 1 — nFRI: %d  mFRI: %.1f yr  WBLb: %.1f  WBLc: %.2f\n",
-#   fri_z1[1], fri_z1[2], fri_z1[5], fri_z1[8]
-# ))
+## ----post---------------------------------------------------------------------
+# Fire-return intervals (FRIs) and mean FRI
+cat("Number of FRIs:", length(out$post$FRI), "\n")
+cat("Mean FRI:", round(mean(out$post$FRI), 1), "yr\n")
 
-## ----char-results, eval = FALSE-----------------------------------------------
-# dim(out$char_results)
-# #> [1] 500  33
-# 
-# # Total number of fire events identified
-# sum(out$charcoal$charPeaks[, 4], na.rm = TRUE)
-# #> [1] 39
+# Per-zone Weibull statistics (zone 1)
+fri_z1 <- out$post$FRI_params_zone[1, ]
+cat(sprintf(
+  "Zone 1 — nFRI: %d  mFRI: %.1f yr  WBLb: %.1f  WBLc: %.2f\n",
+  fri_z1[1], fri_z1[2], fri_z1[5], fri_z1[8]
+))
 
-## ----fig3, eval = FALSE-------------------------------------------------------
-# char_plot_peaks(out)
+## ----char-results-------------------------------------------------------------
+dim(out$char_results)
 
-## ----fig5, eval = FALSE-------------------------------------------------------
-# char_plot_cumulative(out)
+# Total number of fire events identified
+sum(out$charcoal$charPeaks[, 4], na.rm = TRUE)
 
-## ----fig6, eval = FALSE-------------------------------------------------------
-# char_plot_fri(out)
+## ----fig1, eval = PLOT_OK, fig.width = 7, fig.height = 5----------------------
+char_plot_raw(out)
 
-## ----fig7, eval = FALSE-------------------------------------------------------
-# char_plot_fire_history(out)
+## ----fig2, eval = PLOT_OK, fig.width = 8, fig.height = 8----------------------
+char_plot_thresh_diag(out)
 
-## ----fig8, eval = FALSE-------------------------------------------------------
-# char_plot_zones(out)
+## ----fig3, eval = PLOT_OK, fig.width = 7, fig.height = 6----------------------
+char_plot_peaks(out)
+
+## ----fig5, eval = PLOT_OK, fig.width = 7, fig.height = 4----------------------
+char_plot_cumulative(out)
+
+## ----fig6, eval = PLOT_OK, fig.width = 7, fig.height = 5----------------------
+char_plot_fri(out)
+
+## ----fig7, eval = PLOT_OK, fig.width = 7, fig.height = 8----------------------
+char_plot_fire_history(out)
+
+## ----fig8, eval = PLOT_OK, fig.width = 8, fig.height = 4----------------------
+char_plot_zones(out)
 
 ## ----save-figs, eval = FALSE--------------------------------------------------
 # char_plot_all(out, save = TRUE, out_dir = tempdir())
